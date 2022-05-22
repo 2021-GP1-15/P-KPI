@@ -1,0 +1,82 @@
+﻿@model IP_KPI.Models.AlumniEmployment
+
+@{ ViewData["Title"] = "Edit";
+                Layout = "~/Views/Shared/_Adminlayout.cshtml"; }
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+    <h4>AlumniEmployment</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="AlumniemploymentsEdit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Year" class="control-label"></label>
+                    <input asp-for="Year" class="form-control" />
+                    <span asp-validation-for="Year" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Gender" class="control-label"></label>
+                    <select asp-for="Gender" class="form-control">
+                        <option value="انثى">انثى</option>
+                        <option value="ذكر">ذكر</option>
+                    </select>
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="GradEmployed" class="control-label"></label>
+                    <input asp-for="GradEmployed" class="form-control" />
+                    <span asp-validation-for="GradEmployed" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="GradEnrolled" class="control-label"></label>
+                    <input asp-for="GradEnrolled" class="form-control" />
+                    <span asp-validation-for="GradEnrolled" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="AlumniId" />
+                <div class="form-group">
+                    <label asp-for="ProgramId" class="control-label"></label>
+                    <select asp-for="ProgramId" class="form-control" asp-items="ViewBag.ProgramId"></select>
+                    <span asp-validation-for="ProgramId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="NumOfStudentPassQiyasExam" class="control-label"></label>
+                    <input asp-for="NumOfStudentPassQiyasExam" class="form-control" />
+                    <span asp-validation-for="NumOfStudentPassQiyasExam" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="NumOfStudentPassCareerExam" class="control-label"></label>
+                    <input asp-for="NumOfStudentPassCareerExam" class="form-control" />
+                    <span asp-validation-for="NumOfStudentPassCareerExam" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TotalGradEvalByCompany" class="control-label"></label>
+                    <input asp-for="TotalGradEvalByCompany" class="form-control" />
+                    <span asp-validation-for="TotalGradEvalByCompany" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="NumOfCompanyEvaled" class="control-label"></label>
+                    <input asp-for="NumOfCompanyEvaled" class="form-control" />
+                    <span asp-validation-for="NumOfCompanyEvaled" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-sm btn-outline-secondary w-25" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+</body>
+</html>

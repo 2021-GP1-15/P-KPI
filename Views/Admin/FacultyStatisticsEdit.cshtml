@@ -1,0 +1,121 @@
+﻿@model IP_KPI.Models.FacultyStatistic
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Adminlayout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>FacultyStatistic</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="FacultyStatisticsEdit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="FacultyId" />
+            <div class="form-group">
+                <label asp-for="Year" class="control-label"></label>
+                <input asp-for="Year" class="form-control" />
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <select asp-for="Gender" class="form-control">
+                    <option value="انثى">انثى</option>
+                    <option value="ذكر">ذكر</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumOfAssistantProf" class="control-label"></label>
+                <input asp-for="NumOfAssistantProf" class="form-control" />
+                <span asp-validation-for="NumOfAssistantProf" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumOfProf" class="control-label"></label>
+                <input asp-for="NumOfProf" class="form-control" />
+                <span asp-validation-for="NumOfProf" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumOfAssociateProf" class="control-label"></label>
+                <input asp-for="NumOfAssociateProf" class="form-control" />
+                <span asp-validation-for="NumOfAssociateProf" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumOfTeacher" class="control-label"></label>
+                <input asp-for="NumOfTeacher" class="form-control" />
+                <span asp-validation-for="NumOfTeacher" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumOfLecturer" class="control-label"></label>
+                <input asp-for="NumOfLecturer" class="form-control" />
+                <span asp-validation-for="NumOfLecturer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumOfTeachingAssistant" class="control-label"></label>
+                <input asp-for="NumOfTeachingAssistant" class="form-control" />
+                <span asp-validation-for="NumOfTeachingAssistant" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumOfResignation" class="control-label"></label>
+                <input asp-for="NumOfResignation" class="form-control" />
+                <span asp-validation-for="NumOfResignation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProgramId" class="control-label"></label>
+                <select asp-for="ProgramId" class="form-control" asp-items="ViewBag.ProgramId"></select>
+                <span asp-validation-for="ProgramId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumOfRespondent" class="control-label"></label>
+                <input asp-for="NumOfRespondent" class="form-control" />
+                <span asp-validation-for="NumOfRespondent" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SurveyScore" class="control-label"></label>
+                <input asp-for="SurveyScore" class="form-control" />
+                <span asp-validation-for="SurveyScore" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Type" class="control-label"></label>
+                <select asp-for="Type" class="form-control">
+                    <option value="على راس العمل">على راس العمل</option>
+                    <option value="ليس على راس العمل">ليس على راس العمل</option>
+                </select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumOfExellentScore" class="control-label"></label>
+                <input asp-for="NumOfExellentScore" class="form-control" />
+                <span asp-validation-for="NumOfExellentScore" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumOfGoodScore" class="control-label"></label>
+                <input asp-for="NumOfGoodScore" class="form-control" />
+                <span asp-validation-for="NumOfGoodScore" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumOfNeutralScore" class="control-label"></label>
+                <input asp-for="NumOfNeutralScore" class="form-control" />
+                <span asp-validation-for="NumOfNeutralScore" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumOfWeakScore" class="control-label"></label>
+                <input asp-for="NumOfWeakScore" class="form-control" />
+                <span asp-validation-for="NumOfWeakScore" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-sm btn-outline-secondary w-25" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="FacultyStatisticsIndex">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

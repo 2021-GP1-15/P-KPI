@@ -1,0 +1,34 @@
+﻿@model IP_KPI.Models.College
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Adminlayout.cshtml";
+}
+
+<h1>Create College</h1>
+
+<h4>College</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CollegesCreate">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CollageName" class="control-label"></label>
+                <input asp-for="CollageName" class="form-control" />
+                <span asp-validation-for="CollageName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class=" btn btn-sm btn-outline-secondary w-25" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

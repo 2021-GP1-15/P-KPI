@@ -1,0 +1,42 @@
+﻿@{ ViewData["Title"] = "Home Page"; }
+<style>
+    .chart-container-main {
+        position: relative;
+       
+  
+      
+        width:50%;
+        border: 3px solid #dee2e6;
+        background-color: #ffffff;
+     
+       margin:auto;
+       padding: 2%
+    }
+
+</style>
+<div class=" text-center chart-container-main  ">
+    <br /><br />
+    <h3 class="card-title">بوابة مؤشرات قياس الاداء البرامجية</h3>
+
+    <p class="card-text"> هي اشكال محددة من الأدلة تستخدمها المؤسسة أو أي وكالة أخرى لتقديم دليل على جودة الأداء، وتعد مؤشرات الأداء الاساسية من أهم الأدوات لتقييم جودة البرامج الأكاديمية وفقاً لمعايير ومحكمات المركز الوطني للتقويم والاعتماد الأكاديمي، ومن أبرز الممارسات التي تسهم في دعم صناعة القرار وعمليات المتابعة والتطوير والتحسين المستمر.</p>
+    <p class="card-text">صممت هذه البوابة خصيصا لقياس اداء البرامج الاكادمية في جامعة الملك سعود </p>
+    <br />
+    <hr />
+    <br />
+    <h3 class="card-title">تصفح باقي الصفحات</h3>
+    <br />
+    <div>
+        @if (User.IsInRole("Manager") || User.IsInRole("Data Entry"))
+        {
+            <a asp-area="" asp-controller="Upload" asp-action="Index" style="background-color: #0084BD" class="btn text-white">الذهاب الى صفحة رفع الملفات</a>
+        }
+
+        @if (User.IsInRole("Manager") || User.IsInRole("Decision Maker"))
+        {
+            <a asp-area="" asp-controller="Home" asp-action="tables" style="background-color: #0084BD" class="btn text-white">الذهاب الى صفحة طباعة التقارير</a>
+            <br /><br />
+            <a asp-area="" asp-controller="Home" asp-action="Index" style="background-color: #0084BD" class="btn text-white">الذهاب الى صفحة استعراض الرسوم البيانية</a>
+
+        }
+    </div>
+</div>

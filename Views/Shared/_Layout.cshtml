@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - KPI</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/favicon.ico" rel="icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .rotateimg180 {
+            -webkit-transform: rotate(180deg);
+            -moz-transform: rotate(180deg);
+            -ms-transform: rotate(180deg);
+            -o-transform: rotate(180deg);
+            transform: rotate(180deg);
+        }
+
+        .page-holder {
+            min-height: 100vh;
+        }
+
+        .bg-cover {
+            background-size: cover !important;
+        }
+    </style>
+</head>
+<body class=" page-holder bg-cover" style=" background-color: #f7f8fa">
+
+    <header class="bg-dark">
+
+        <nav class="navbar  sticky-top navbar-expand-lg navbar-dark bg-dark">
+
+            <div>
+                <a class="navbar-brand d-flex  align-items-center " asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/pics/logoo.svg" width="15%" height="15%" alt="">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+            </div>
+
+            <div class="collapse navbar-collapse " id="navbarText">
+                <ul class="navbar-nav mr-auto ml-5  ">
+                    @if (User.IsInRole("Manager") || User.IsInRole("Decision Maker") || User.IsInRole("Data Entry"))
+                    {
+        <li class="nav-item ">
+            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Homepage">الرئيسية</a>
+        </li>}
+                    @if (User.IsInRole("Manager") || User.IsInRole("Decision Maker"))
+                    {
+        <li class="nav-item">
+            <a class=" nav-link" asp-area="" asp-controller="Home" asp-action="Index">الاحصائيات</a>
+        </li>
+}
+                    @if (User.IsInRole("Manager") || User.IsInRole("Decision Maker"))
+                    {
+        <li class="nav-item">
+            <a class=" nav-link" asp-area="" asp-controller="Home" asp-action="tables">التقارير</a>
+        </li>
+}
+                    @if (User.IsInRole("Manager") || User.IsInRole("Data Entry"))
+                    {
+        <li class="nav-item">
+            <a class=" nav-link" asp-area="" asp-controller="Upload" asp-action="Index">التحميل</a>
+        </li>}
+                </ul>
+
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-outline-secondary rounded-0" type="button" data-toggle="modal" data-target="#exampleModal">طلب تغيير الصلاحيات</button>
+                    <a class="btn btn-sm btn-outline-secondary rounded-0" asp-area="" asp-controller="Account" asp-action="Logout">تسجيل الخروج</a>
+                </div>
+
+        </nav>
+    </header>
+    <main role="main" class="">
+
+        @RenderBody()
+
+    </main>
+
+    <div class="modal fade text-right" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">طلب تغيير الصلاحية</h5>
+                </div>
+                <div class="modal-body ">
+                    <form>
+                        <div class="form-group">
+                            <label for="user-name" class="col-form-label">اسم المستخدم:</label>
+                            @{
+                                var users = User.Claims.FirstOrDefault(); }
+                            <input id="user-name" class="form-control" disabled type="text" value="@users.Value" />
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">نوع الصلاحية</label>
+                            <select type="text" class="form-control" id="privilegeType">
+                                <option selected disabled>اختر</option>
+                                <option value="Data Entry">مدخل بيانات</option>
+                                <option value="Manager">مدير</option>
+                                <option value="Decision Maker">صانع قرار </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">سبب تغيير الصلاحية</label>
+                            <textarea class="form-control" id="privilegeRes"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                    <button type="button" class="btn btn-primary" onclick="privilege()">ارسال</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function privilege() {
+            var privilegeType = $('#privilegeType :selected').val();
+            var privilegeRes = $('#privilegeRes').val();
+            var userId = $('#user-name').val();
+            $.ajax({
+                type: "GET",
+                url: "/Account/SetPrivilege",
+                data: { privilegeType: privilegeType, privilegeRes: privilegeRes, userId: userId },
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    alert("تم الارسال بنجاح")
+                }
+                ,
+                error: function () {
+                    alert("حدث خطأ ما")
+                }
+            });
+        }
+
+
+
+
+
+        $('#exampleModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('whatever') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            modal.find('.modal-title').text('طلب تغيير صلاحية')
+            modal.find('.modal-body input').val(recipient)
+
+        })
+    </script>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

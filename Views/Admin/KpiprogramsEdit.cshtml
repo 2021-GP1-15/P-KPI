@@ -1,0 +1,84 @@
+﻿@model IP_KPI.Models.Kpiprogram
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Adminlayout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Kpiprogram</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="KpiprogramsEdit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="KpiprogramId" />
+            <div class="form-group">
+                <label asp-for="KpiId" class="control-label"></label>
+                <select asp-for="KpiId" class="form-control" asp-items="ViewBag.KpiId"></select>
+                <span asp-validation-for="KpiId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProgramId" class="control-label"></label>
+                <select asp-for="ProgramId" class="form-control" asp-items="ViewBag.ProgramId"></select>
+                <span asp-validation-for="ProgramId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TargetBenchmark" class="control-label"></label>
+                <input asp-for="TargetBenchmark" class="form-control" />
+                <span asp-validation-for="TargetBenchmark" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="InternalBenchmark" class="control-label"></label>
+                <input asp-for="InternalBenchmark" class="form-control" />
+                <span asp-validation-for="InternalBenchmark" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExternalBenchmark" class="control-label"></label>
+                <input asp-for="ExternalBenchmark" class="form-control" />
+                <span asp-validation-for="ExternalBenchmark" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Year" class="control-label"></label>
+                <input asp-for="Year" class="form-control" />
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Term" class="control-label"></label>
+                <select asp-for="Term" class="form-control">
+                    <option value="الفصل الدراسي الاول">الفصل الدراسي الاول</option>
+                    <option value="الفصل الدراسي الثاني">الفصل الدراسي الثاني</option>
+                    <option value="الفصل الدراسي الثالث">الفصل الدراسي الثالث</option>
+                    <option value="الفصل الدراسي الصيفي">الفصل الدراسي الصيفي</option>
+                </select>
+                <span asp-validation-for="Term" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <select asp-for="Gender" class="form-control">
+                    <option value="انثى">انثى</option>
+                    <option value="ذكر">ذكر</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActualKpivalue" class="control-label"></label>
+                <input asp-for="ActualKpivalue" class="form-control" />
+                <span asp-validation-for="ActualKpivalue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-sm btn-outline-secondary w-25" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="KpiprogramsIndex">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,173 @@
+﻿@model IEnumerable<IP_KPI.Models.AlumniEmployment>
+
+@{ ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Adminlayout.cshtml"; }
+
+
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">AlumniEmployments</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#exampleModal">Export</button>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">API Link</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input class="textToBeCopied" type="url" value="https://localhost:44312/api/kpi/Alumniemployments" readonly />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary copyButton">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="row ml-1">
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search by..">
+    <select class="form-control form-control-sm" onchange="myFunction()" id="ser" style="width:7%; border-radius: unset; ">
+        <option value="1">Year</option>
+        <option value="2">Gender</option>
+        <option value="9">Program</option>
+    </select>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-sm" id="myTable">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.AlumniId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Year)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Gender)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GradEmployed)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GradEnrolled)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NumOfStudentPassQiyasExam)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NumOfStudentPassCareerExam)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TotalGradEvalByCompany)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NumOfCompanyEvaled)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Program)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AlumniId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GradEmployed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GradEnrolled)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumOfStudentPassQiyasExam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumOfStudentPassCareerExam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalGradEvalByCompany)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumOfCompanyEvaled)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Program.ProgramId)
+                </td>
+                <td>
+                    <a class=" btn btn-sm btn-outline-secondary" asp-action="AlumniemploymentsEdit" asp-route-id="@item.AlumniId">Edit</a>
+                    <button class="del btn btn-sm btn-outline-secondary" id="@item.AlumniId"> Delete</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        $(".alumemp").addClass("active");
+        $(".del").click(function () {
+            var id = $(this).attr('id');
+            var check = confirm("are you sure you want to delete this record?");
+            if (check) {
+                $.ajax({
+                    type: "post",
+                    url: "/Admin/deleteAlumniemp",
+                    data: { id: id },
+                    success: function () {
+                        alert("Deleted successfully");
+                        location.reload();
+                    },
+                    error: function () {
+                        alert("An error occured");
+                    }
+                });
+            }
+
+        });
+
+
+        function myFunction() {
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                var x = $("#ser :selected").val();
+
+                td = tr[i].getElementsByTagName("td")[x];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+
+
+    </script>

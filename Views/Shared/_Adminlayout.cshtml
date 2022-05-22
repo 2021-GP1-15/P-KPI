@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>@ViewData["Title"] - KPI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/favicon.ico" rel="icon" type="image/x-icon" />
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+            overflow-x: hidden;
+        }
+
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        a {
+            font-weight: bold
+        }
+    </style>
+    <link href="~/css/Admin.css" rel="stylesheet">
+
+
+    <!-- Custom styles for this template -->
+</head>
+<body >
+
+    <header class="navbar navbar-dark sticky-top navbar-expand-lg bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" asp-controller="Admin" asp-action="Index">P-KPI</a>
+        <button class="navbar-toggler position-absolute d-md-none" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-nav ">
+            <div class="nav-item text-nowrap form-inline">
+                <a class="nav-link px-3" asp-area="" asp-controller="Admin" asp-action="Privileges">Pending Requests <span class="badge badge-danger">@ViewData["privilegeCount"]</span><span class="sr-only">unread messages</span></a>
+                <a class="nav-link px-3" asp-area="" asp-controller="Account" asp-action="Logout">Sign out</a>
+            </div>
+        </div>
+    </header>
+    <div class="container-fluid">
+        <div class="row">
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse navbar-collapse">
+                <div class="position-sticky pt-3 ">
+
+                    <ul class="nav flex-column ">
+                        <li class="nav-item ">
+                            <br />
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link col" asp-controller="Admin" asp-action="Index">
+                                College
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link dep" asp-controller="Admin" asp-action="DepartmentsIndex">
+                                Department
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link unipro" asp-controller="Admin" asp-action="UniProgramsIndex">
+                                Program
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link kpi" asp-controller="Admin" asp-action="KpisIndex">
+                                KPI
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link kpipro" asp-controller="Admin" asp-action="KpiprogramsIndex">
+                                KPI Program
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link pubrep" asp-controller="Admin" asp-action="PublicationReportsIndex">
+                                Publication Report
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link batchstat" asp-controller="Admin" asp-action="BatchStatisticsIndex">
+                                Batch Statistic
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link classsec" asp-controller="Admin" asp-action="ClassSectionsIndex">
+                                Class Sections
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link facstat" asp-controller="Admin" asp-action="FacultyStatisticsIndex">
+                                Faculty Statisics
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link studsur" asp-controller="Admin" asp-action="SurveysIndex">
+                                Surveys
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link alumemp" asp-controller="Admin" asp-action="AlumniEmploymentsIndex">
+                                Alumni & Employment
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link usr" asp-controller="Admin" asp-action="UserIndex">
+                                Users
+                            </a>
+                        </li>
+
+                    </ul>
+
+
+                </div>
+            </nav>
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex  flex-wrap flex-md-nowrap align-items-center pt-3 pb-2">
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class=" me-2">
+                            <button class="btn btn-sm btn-outline-secondary bg-dark text-light " id="info">
+                                Information
+                            </button>
+                            <div id="minfo" class="card text-left " style="z-index:200; position:absolute; left:60px">
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+               
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        $(document).ready(function () {
+            $("#info").click(function () {
+                $("#minfo").html(" <small> To navigate though the API: <br> Table?pageNumber=num&pageSize=num <br> pageNumber to navigate the table, pageSize is the number of results shown (10 max) <br> Example: Departments?pageNumber=2&pageSize=5 </small>").toggle();
+            })
+        });
+  
+
+    </script>
+</body>
+</html>
+

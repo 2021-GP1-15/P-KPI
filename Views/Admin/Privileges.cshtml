@@ -1,0 +1,89 @@
+﻿
+@{ ViewData["Title"] = "Privileges";
+    Layout = "~/Views/Shared/_Adminlayout.cshtml"; }
+
+@model IEnumerable<IP_KPI.Models.PrivilegeRequest>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Pending Requests</h1>
+
+</div>
+
+
+    <div class="table-responsive">
+        <table class="table table-striped table-sm" id="myTable">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RequestId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PrivilegeType)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PrivilegeRes)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    @foreach (var item in Model)
+                    {
+                      
+                            <tr>
+                                <td id="elementCheck2">
+                                    @Html.DisplayFor(modelItem => item.RequestId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PrivilegeType)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PrivilegeRes)
+                                </td>
+                                <td>
+                                    <a class=" btn btn-sm btn-outline-secondary" asp-action="EditUser" asp-route-id="@item.UserId">Accept</a>
+                                    <button class="del btn btn-sm btn-outline-secondary" id="@item.RequestId">Ignore</button>
+                                </td>
+                            </tr>
+                        
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+
+<script>
+
+    $(".del").click(function () {
+        var id = $(this).attr('id');
+        var check = confirm("are you sure you want to delete this record?");
+        if (check) {
+            $.ajax({
+                type: "post",
+                url: "/Admin/deletePrivilegeRequest",
+                data: { id: id },
+                success: function () {
+                    alert("Deleted successfully!");
+                    location.reload();
+                },
+                error: function () {
+                    alert("An error occured while deleting this record!");
+                }
+            });
+        }
+
+    });
+  
+
+</script>
+

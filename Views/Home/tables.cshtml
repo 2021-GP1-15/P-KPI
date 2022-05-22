@@ -1,0 +1,416 @@
+﻿@{ ViewData["Title"] = "التقارير"; }
+
+@model IP_KPI.Models.College;
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
+
+<style>
+
+    #h {
+        margin: 2%;
+        text-align: right !important;
+    }
+
+    #myList {
+        text-align: right !important;
+        width: 100%;
+    }
+
+    .required:after {
+        content: " *";
+        color: red;
+    }
+
+
+    .contt {
+        display: flex;
+        flex-direction: row;
+        flex-flow: wrap;
+        width: 100%
+    }
+
+    /* Responsive layout - makes a one column-layout instead of two-column layout */
+
+</style>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+            <nav class=" navbar-expand-md   ">
+                <!-- Brand -->
+                <!-- Toggler/collapsibe Button -->
+                <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#collapsibleNavbar" aria-controls="collapsibleNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-funnel-fill" viewBox="0 0 16 16">
+                            <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z" />
+                        </svg>
+                    </span>
+                </button>
+
+                <!-- Navbar links -->
+                <div class="collapse navbar-collapse " id="collapsibleNavbar">
+                    <form class="bg-dark " style=" text-align: right; border: 3px solid #dee2e6; padding: 15px 10px 15px 20px; color: white; ">
+                        <p>اعرض الجداول على حسب:</p>
+                        <!-- Fillter code-->
+                        <!-- KPI Option -->
+                        <script>
+                            var viewbagCount = 0;
+                        </script>
+                        <label class="small required">اختر المؤشر:</label>
+                        <select onchange="enable()" name="KPI" id="KPI" class="form-control form-control-sm">
+                            <option value="null" disabled selected>اختر</option>
+                            <option value="All">الكل</option>
+
+                            @foreach (var x in ViewBag.KPINames)
+                            {
+                    <option value="@x">@x</option>}
+                        </select>
+
+                        <!-- College Option -->
+                        <label class="small required">اختر الكلية:</label>
+                        <select id="college" name="college" onchange="ChangeDepartments(); filterSelected();" class="form-control form-control-sm">
+                            <option value="null" selected disabled>اختر</option>
+                            @foreach (College x in ViewBag.Colleges)
+                            {
+                    <option value="@x.CollegeId">@x.CollageName</option>}
+                        </select>
+
+                        <!-- Department Option -->
+                        <label class="small required">اختر القسم:</label>
+                        <select id="department" onchange="ChangePrograms(); filterSelected();" name="department" class="form-control form-control-sm">
+                            <option value="null" selected>اختر</option>
+                        </select>
+
+                        <!-- Program Option -->
+                        <label class="small required">اختر البرنامج:</label>
+                        <select name="program" id="program" onchange="filterSelected()" class="form-control form-control-sm">
+                            <option value="null" selected>اختر</option>
+                        </select>
+
+                        <!-- Year Option -->
+                        <label class="small required">اختر السنة:</label>
+                        <input onchange="filterSelected()" class="form-control form-control-sm" type="text" name="datepicker" placeholder="اختر" id="datepicker" />
+                        <script>
+                            var year1 = "";
+                            $("#datepicker").datepicker({
+                                format: "yyyy",
+                                viewMode: "years",
+                                minViewMode: "years",
+                                autoclose: true //to close picker once year is selected
+                            });
+                            //to assign the picker value
+                            $("#datepicker").on("change", function () {
+                                var selected = $(this).val();
+                                year1 = selected;
+                            });
+                        </script>
+
+                        <!-- Term Option -->
+                        <label hidden id="termLabel" class="small term">اختر الفصل الدراسي:</label>
+                        <select hidden onchange="filterSelected()" class="form-control form-control-sm term" id="term" name="term">
+                            <option value="null" selected disabled>اختر</option>
+                            <option value="0">الكل</option>
+                            <option value="الفصل الدراسي الاول">الفصل الاول</option>
+                            <option value="الفصل الدراسي الثاني">الفصل الثاني</option>
+                            <option value="الفصل الدراسي الثالث">الفصل الثالث</option>
+                            <option value="الفصل الدراسي الصيفي">الفصل الصيفي</option>
+                        </select>
+
+
+
+
+                        <!-- buttons -->
+                        <br />
+                        <button class="btn btn-block text-white btn-sm shadow" style="background-color: #0084BD" disabled id="show" onclick="ShowTable()" data-toggle="button" aria-pressed="false">عرض الجدول</button>
+                        <button disabled id="share" class="btn btn-block text-white btn-sm shadow" style="background-color: #0084BD;" type="button" onclick="printJS({ printable: 'tableDiv', style: 'color:red;', type: 'html', scanStyles: false })">طباعة الملف بصيغة (pdf)</button>
+                        <button disabled id="Export" class="btn btn-block text-white btn-sm shadow" style="background-color: #0084BD" onclick="exportTableToExcel('myTable','KPITable')" type="button">مشاركة كملف اكسل</button>
+                    </form>
+                </div>
+
+            </nav>
+
+        </div>
+        @* end of info buttun *@
+
+        <!-- Filter End -->
+        <!-- Charts Area -->
+        <div class=" container-fluid table-responsive col-md-10" id="tab">
+            <fieldset id="tableDiv" class=" ">
+
+
+                <div class='text-center' id="contt">
+                </div>
+
+                <div class='text-right' id="act">
+                </div>
+
+            </fieldset>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.6.0/print.js" integrity="sha512-/fgTphwXa3lqAhN+I8gG8AvuaTErm1YxpUjbdCvwfTMyv8UZnFyId7ft5736xQ6CyQN4Nzr21lBuWWA9RTCXCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.6.0/print.css" integrity="sha512-tKGnmy6w6vpt8VyMNuWbQtk6D6vwU8VCxUi0kEMXmtgwW+6F70iONzukEUC3gvb+KTJTLzDKAGGWc1R7rmIgxQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.6.0/print.min.css" integrity="sha512-zrPsLVYkdDha4rbMGgk9892aIBPeXti7W77FwOuOBV85bhRYi9Gh+gK+GWJzrUnaCiIEm7YfXOxW8rzYyTuI1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" type="text/css" href="print.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.6.0/print.min.js" integrity="sha512-16cHhHqb1CbkfAWbdF/jgyb/FDZ3SdQacXG8vaOauQrHhpklfptATwMFAc35Cd62CQVN40KDTYo9TIsQhDtMFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    $(window).on('resize', function () {
+        if ($(window).width() < 800) {
+
+            $('#collapsibleNavbar').css({ 'z-index': '100', 'position': 'absolute' });
+
+
+
+        }
+        else {
+            $('#collapsibleNavbar').css({ 'z-index': '0', 'position': 'static' });
+
+
+
+        }
+    });
+
+    function enable() {
+        var KPICode = $('#KPI :selected').val();
+        var term = document.getElementsByClassName("term");
+        console.log(term)
+        //filter without term
+        if (KPICode == "مؤشرات احصاءات الدفعة" || KPICode == "مؤشرات الخريجين والتوظيف" ||  KPICode == "مؤشرات الهيئة التعليمية") {
+            for (var i = 0; i < 2; i++) {
+                term[i].hidden = true;
+            }
+            document.getElementById("termLabel").classList.remove("required");
+        }
+        //filter with term
+        if (KPICode == "مؤشرات الاستبانات" || KPICode == "مؤشر الفصول" || KPICode == "مؤشرات البحوث" || KPICode == "All") {
+            for (var i = 0; i < 2; i++) {
+                term[i].hidden = false;
+            }
+            document.getElementById("termLabel").classList.add("required");
+        }
+    }
+
+
+    function filterSelected() {
+        var KPICode = $('#KPI :selected').val();
+        var college = $('#college :selected').val();
+        var department = $('#department :selected').val();
+        var program = $('#program :selected').val();
+        var term = $('#term :selected').val();
+        var year = year1.toString();
+
+        if (KPICode == "مؤشرات الاستبانات" || KPICode == "مؤشر الفصول" || KPICode == "مؤشرات البحوث" || KPICode == "All") {
+            if (KPICode != "null" && college != "null" && department != "null" && program != "null" && term != "null" && year != "") {
+                document.getElementById("show").disabled = false;
+                document.getElementById("share").disabled = false;
+                document.getElementById("Export").disabled = false;
+                console.log("enterd");
+            }
+        }
+        else if (KPICode == "مؤشرات احصاءات الدفعة" || KPICode == "مؤشرات الخريجين والتوظيف" || KPICode == "مؤشرات الهيئة التعليمية") {
+            if (KPICode != "null" && college != "null" && department != "null" && program != "null" && year != "") {
+                document.getElementById("show").disabled = false;
+                document.getElementById("share").disabled = false;
+                document.getElementById("Export").disabled = false;
+                console.log("enterd");
+            }
+        }
+
+    }
+
+    function splitText(text, count) {
+        if (text.length < count)
+            return text;
+        return text.slice(0, count);
+    }
+
+
+    function ChangeDepartments() {
+        var college = $('#college :selected').val();
+        $.ajax({
+            type: "GET",
+            url: "/Home/GetDepartments",
+            data: { collegeId: college },
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                $('#department')
+                    .find('option')
+                    .remove()
+                    .end()
+                    .append('<option value="null" selected>اختر</option>')
+                    .val('');
+                for (var i = 0; i < data.length; i++) {
+                    $("#department").append('<option value= "' + data[i].departmentId + '">' + data[i].departmentName + '</option>');
+                }
+            },
+            error: function () {
+                alert("حدث خطأ ما")
+            }
+        });
+    }
+
+
+    function ChangePrograms() {
+        var departmentId = $('#department :selected').val();
+        $.ajax({
+            type: "Get",
+            url: "/Home/GetPrograms",
+            data: { departmentId: departmentId },
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                $('#program')
+                    .find('option')
+                    .remove()
+                    .end()
+                    .append('<option value="null" selected>اختر</option>')
+                    .val('');
+                for (var i = 0; i < data.length; i++) {
+                    $("#program").append('<option value= "' + data[i].programId + '">' + data[i].level + " " + data[i].programName + '</option>');
+                }
+            },
+            error: function () {
+                alert("حدث خطأ ما")
+            }
+        });
+    }
+
+    function ShowTable() {
+        var programId = $('#program :selected').val();
+        var KPICode = $('#KPI :selected').val();
+        var term = $('#term :selected').val();
+        var year = year1.toString();
+        var internalBenchmark = year1.toString();
+        var externalBenchmark = year1.toString();
+        var newTargetBenchmark = year1.toString();
+        var targetBenchmark = year1.toString();
+        var actualKpivalue = year1.toString();
+        var gender = year1.toString();
+
+        $.ajax({
+            type: "Get",
+            url: "/Home/GettableValues",
+            data: { programId: programId, KPICode: KPICode, internalBenchmark: internalBenchmark, externalBenchmark: externalBenchmark, newTargetBenchmark: newTargetBenchmark, targetBenchmark: targetBenchmark, actualKpivalue: actualKpivalue, term: term, year: year, gender: gender },
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                console.log(data);
+
+                var KPIC = []; var target = []; var actualTarget = []; var internal = []; var external = []; var years = []; var descrip = [];
+
+
+                for (var i = 0; i < data.length; i++) {
+                    KPIC.push(data[i].term);
+                    target.push(data[i].targetBenchmark);
+                    actualTarget.push(data[i].actualKpivalue);
+                    internal.push(data[i].internalBenchmark);
+                    external.push(data[i].externalBenchmark);
+                    years.push(data[i].year);
+                    descrip.push(data[i].gender);
+                }
+
+
+
+                if ($('#term').is(":visible")) {
+                    $('#contt').remove();
+                    $('.act').remove();
+                    var row = "<div lang='ar' class='row card-body text-center' id = 'contt' ><div class=' col-md-1'></div><div class='card-body col-md-11'><h4 class='card-title'>تقرير عن نتائج تحليل قياس مؤشرات الاداء</h4><table border='1' lang='ar' align='center' class='table table-bordered table-hover img-thumbnail' id='myTable'><tr><th>المؤشر</th><th>هدف المؤشر</th><th>السنة</th><th>الترم</th><th>القيمة الفعلية</th><th>المقارنة المرجعية الداخلية</th><th>المقارنة المرجعية الخارحية</th><th>الاداء المستهدف</th></tr></table></div></div> ";
+                    $('#tableDiv').append(row);
+
+                    for (var i = 0; i < KPIC.length; i++) {
+                        var tableRow = '<tr class="rr"><td>' + KPIC[i] + '</td><td>' + descrip[i] + '</td><td>' + year + '</td><td>' + years[i] + '</td><td>' + actualTarget[i] + '</td><td>' + internal[i] + '</td><td>' + external[i] + '</td><td>' + target[i] + '</td></tr>';
+                        var myTableBody = $('#myTable');
+                        myTableBody.append(tableRow);
+                        var duplicated = false;
+                        for (var j = i - 1; j >= 0; j--) {
+                            if (KPIC[i] == KPIC[j]) {
+                                duplicated = true;
+                                break;
+                            }
+                        }
+                        if (duplicated == false)
+                            $('#tableDiv').append("<div class='row card-body act text-right'><div class=' col-md-1'></div><div id='analyze' class='card-body col-md-11 text-center'><h4 class='card-title'>التحليل لمؤشر " + KPIC[i] + ":</h4><textarea class='card-text img-thumbnail' rows='2' placeholder='اكتب هنا ملاحظاتك على نتائج التحليل لارفاقها في ملف pdf قبل طباعته.' id='myList'></textarea></div></div>");
+                    }
+                }
+
+                if ($('#term').is(":hidden")) {
+                    $('#contt').remove();
+                    $('.act').remove();
+                    var row = "<div class='row card-body text-center' id = 'contt' ><div class=' col-md-1'></div><div class='card-body col-md-11'><h4 class='card-title'>تقرير عن نتائج تحليل قياس مؤشرات الاداء</h4><table border='1' lang='ar' align='center' class='table table-bordered table-hover img-thumbnail' id='myTable'><tr><th>المؤشر</th><th>هدف المؤشر</th><th>السنة</th><th>القيمة الفعلية</th><th>المقارنة المرجعية الداخلية</th><th>المقارنة المرجعية الخارحية</th><th>الاداء المستهدف</th></tr></table></div></div>";
+                    $('#tableDiv').append(row);
+                    for (var i = 0; i < KPIC.length; i++) {
+                        var tableRow = '<tr class="rr"><td>' + KPIC[i] + '</td><td>' + descrip[i] + '</td><td>' + year + '</td><td>' + actualTarget[i] + '</td><td>' + internal[i] + '</td><td>' + external[i] + '</td><td>' + target[i] + '</td></tr>';
+                        var myTableBody = $('#myTable');
+                        myTableBody.append(tableRow);
+                        var duplicated = false;
+                        for (var j = i - 1; j >= 0; j--) {
+                            if (KPIC[i] == KPIC[j]) {
+                                duplicated = true;
+                                break;
+                            }
+                        }
+                        if (duplicated == false)
+                            $('#tableDiv').append("<div class='row card-body text-right act'><div class=' col-md-1'></div><div id='analyze' class='card-body col-md-11 text-center'><h4 class='card-title'>التحليل لمؤشر " + KPIC[i] + ":</h4><textarea class='card-text img-thumbnail' rows='2' placeholder='اكتب هنا ملاحظاتك على نتائج التحليل لارفاقها في ملف pdf قبل طباعته.' id='myList'></textarea></div></div>");
+                    }
+                }
+            },
+            error: function () {
+                alert("  حدث خطأ ما في الجدول")
+            }
+        });
+    }
+
+    function exportTableToExcel(tableID, filename = '') {
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel';
+        var tableSelect = document.getElementById(tableID);
+        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+        // Specify file name
+        filename = filename ? filename + '.xls' : 'excel_data.xls';
+
+        // Create download link element
+        downloadLink = document.createElement("a");
+
+        document.body.appendChild(downloadLink);
+
+        if (navigator.msSaveOrOpenBlob) {
+            var blob = new Blob(['\ufeff', tableHTML], {
+                type: dataType
+            });
+            navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+            // Create a link to the file
+            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+            // Setting the file name
+            downloadLink.download = filename;
+
+            //triggering the function
+            downloadLink.click();
+        }
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+

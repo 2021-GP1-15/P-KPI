@@ -1,0 +1,144 @@
+﻿@{ ViewData["Title"] = "Upload"; }
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
+<style>
+    label {
+        color: black
+    }
+    .contt {
+        display: flex;
+        flex-direction: row;
+        flex-flow: wrap;
+        width: 100%
+    }
+</style>
+<link href="~/css/upload.css" rel="stylesheet" />
+<div class=" contt justify-content-start">
+    <button class="btn rounded-0 btn-secondary  " id="info" style="  background-color: #0084BD; color: #fff; ">
+        تعليمات
+    </button>
+    <div id="minfo" class="card text-right " style="z-index:200; position:absolute; right:60px">
+    </div>
+</div>
+
+
+        <form name="upload" method="post" asp-controller="Upload" asp-action="UploadExcel" enctype="multipart/form-data">
+
+            <div class=" bg-dark " style="float: right; text-align: right; border: 3px solid #dee2e6; padding: 15px 10px 15px 20px; color: white; ">
+
+                <p>اختر المؤشر</p>
+                <select class="form-control form-control-sm " onchange="filterSelected()" id="kpi" name="kpi">
+                    <option value="null" disabled selected>المؤشرات</option>
+                    <option value="survey">مؤشرات الاستبانات</option>
+                    <option value="publication">مؤشرات البحوث</option>
+                    <option value="facultystatistics">مؤشرات احصائيات هيئة التعليم</option>
+                    <option value="AlumniEmployment">مؤشرات الخريجين والتوظيف</option>
+                    <option value="BatchStatistic">مؤشرات احصاءات الدفعة</option>
+                    <option value="ClassSection">مؤشرات الفصول</option>
+
+                </select>
+            </div>
+
+
+
+            <!--Drag and Drop code-->
+            <div class="container  ">
+
+                <div class="row justify-content-center col-md-10">
+                    <div class="col-md-6 text-right ">
+
+                        <div class="form-group files color">
+                            <label>حمل الملف</label>
+                            <input type="file" onchange="filterSelected()" name="file" id="fileuploadExcel" class="form-control" accept=".xlsx" />
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <div  style="position:relative; left:40%">
+                    <input type="submit" id="sure" class="btn shadow text-white" style="background-color: #0084BD; width: 15%;" value="رفع الملف" disabled>
+                </div>
+
+            </div>
+
+
+<div class="text-center">
+    <p class="text-danger" id="msgerr"> @ViewBag.err</p>
+    <p class="text-success" id="msgsuc"> @ViewBag.suc</p>
+
+    @if (ViewBag.replace != null)
+    {
+
+
+        <script>
+            var rep = @ViewBag.replace;
+
+            var x = confirm("يوجد بيانات متكرره هل ترغب باستبدالها؟ ");
+            if (x) {
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Upload/Replace",
+                    data: { rep: rep },
+                    success: function () {
+                        alert("تم حفظ البيانات الجديدة والمتكرره بنجاح")
+                    },
+                    error: function () {
+                       alert("حدث خطأ ما اثناء حفظ البيانات المتكرره")
+                    }
+                });
+            } else {
+                   $("#msgsuc").append("<p>تم حفظ البايانات الجديده بنجاح</p>");
+
+            }
+        </script>
+    }
+</div>
+</form>
+
+
+
+
+
+<!--for the year input-->
+
+<script>
+
+    $(document).ready(function () {
+        setTimeout(function () {
+            $("#msgerr").fadeOut();
+        }, 5500);
+
+        $(document).ready(function () {
+            $("#info").click(function () {
+                $("#minfo").html(" <small> هذه الشاشة تسمح لك برفع ملفات الإكسل لإدخال البيانات الخاصة بمؤشرات الأداء الى النظام<br> قم باختيار نوع المعيار، بعدها قم بتحميل الملف ثم اضغط زر 'رفع الملف' لحفظ البيانات</small>").toggle();
+            })
+        });
+    });
+
+    $(document).ready(function () {
+        setTimeout(function () {
+            $("#msgsuc").fadeOut();
+        }, 3500);
+    });
+
+    function filterSelected() {
+        var file = document.getElementById("fileuploadExcel").value;
+        var KPICode = $('#kpi :selected').val();
+
+
+
+        if (file != "" && KPICode != "null") {
+            document.getElementById("sure").disabled = false;
+        }
+
+
+    }
+
+
+</script>

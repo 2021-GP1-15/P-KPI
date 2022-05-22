@@ -1,0 +1,101 @@
+﻿@model IEnumerable<IP_KPI.Models.Kpi>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Adminlayout.cshtml";
+}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">KPIs</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#exampleModal">Export</button>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">API Link</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input class="textToBeCopied" type="url" value="https://localhost:44312/api/kpi/Kpis" readonly />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary copyButton">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="table-responsive">
+    
+    <table class="table table-striped table-sm" id="myTable">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.KpiId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Kpicode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Kpiname)
+                </th>
+              
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KpiId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Kpicode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Kpiname)
+                </td>
+               
+                <td>
+                    <a class=" btn btn-sm btn-outline-secondary" asp-action="KpisEdit" asp-route-id="@item.KpiId">Edit</a>
+                    <button class="del btn btn-sm btn-outline-secondary" id="@item.KpiId"> Delete</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+
+<script>
+    $(".kpi").addClass("active");
+    $(".del").click(function () {
+        var id = $(this).attr('id');
+        var check = confirm("are you sure you want to delete this record?");
+        if (check) {
+            $.ajax({
+                type: "post",
+                url: "/Admin/deleteKpi",
+                data: { id: id },
+                success: function () {
+                    alert("Deleted successfully");
+                    location.reload();
+                },
+                error: function () {
+                    alert("An error occured");
+                }
+            });
+        }
+
+    });
+    </script>
