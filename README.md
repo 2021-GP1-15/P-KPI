@@ -12,7 +12,7 @@ the project aims to automate the process of measuring the KPI of KSU academic pr
 
 
 **Registeration**
-| Role          | username      | Password  |
+| Role          | Username      | Password  |
 | ------------- |:-------------:| -----:|
 | Admin      | Admin@ksu | ksu2022 |
 | Manager     | Manager@ksu      |   ksu2022|
