@@ -12,18 +12,18 @@ the project aims to automate the process of measuring the KPI of KSU academic pr
 
 
 TO register as 
-ADMIN:
+*ADMIN:
 username: Admin@ksu
 password: ksu2022
 
-Manager:
+*Manager:
 username: Manager@ksu
 password: ksu2022
 
-Decision Maker:
+*Decision Maker:
 username: DecisionMaker@ksu
 password: ksu2022
 
-Data Entry:
+*Data Entry:
 username: DataEntry2@ksu
 password: ksu2022
