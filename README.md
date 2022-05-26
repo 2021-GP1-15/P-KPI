@@ -8,7 +8,7 @@ the project aims to automate the process of measuring the KPI of KSU academic pr
 - unzip the folder 
 - open visual studio --> open a project or soultion --> choose IP-KPI.sln file
 
-
+***
 
 
 **Registeration**
