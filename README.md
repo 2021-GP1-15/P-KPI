@@ -14,21 +14,8 @@ the project aims to automate the process of measuring the KPI of KSU academic pr
 **register **
 | Role          | username      | Passwprd  |
 | ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
--ADMIN:
--username: Admin@ksu
--password: ksu2022
+| Admin      | Admin@ksu | ksu2022 |
+| Manager     | Manager@ksu      |   ksu2022|
+| Decision Maker | DecisionMaker@ksu     |   ksu2022 |
+| Data Entry | DataEntry2@ksu    |   ksu2022 |
 
--Manager:
-username: Manager@ksu
-password: ksu2022
-
--Decision Maker:
-username: DecisionMaker@ksu
-password: ksu2022
-
--Data Entry:
-username: DataEntry2@ksu
-password: ksu2022
